@@ -1,5 +1,5 @@
 import unittest
-from refactored_code import TaskManager
+from refactored_code import TaskManager, Task
 
 class TestRefactoredTaskManager(unittest.TestCase):
     def setUp(self):
@@ -46,3 +46,42 @@ class TestRefactoredTaskManager(unittest.TestCase):
         self.manager.mark_task_done(0)
         self.manager.mark_task_done(1)
         self.assertTrue(all(t.done for t in self.manager.tasks))
+
+    def test_task_properties(self):
+        task = self.manager.tasks[0]
+        self.assertEqual(task.title, "Купити хліб")
+        self.assertEqual(task.priority, "середній")
+
+    def test_empty_task_list_delete(self):
+        self.manager.delete_task(0)
+        self.manager.delete_task(0)
+        self.manager.delete_task(0)
+        self.assertEqual(len(self.manager.tasks), 0)
+
+    def test_empty_task_list_mark_done(self):
+        self.manager.delete_task(0)
+        self.manager.delete_task(0)
+        self.manager.mark_task_done(0)
+        self.assertEqual(len(self.manager.tasks), 0)
+
+    def test_str_output_contains(self):
+        output = str(self.manager)
+        self.assertIn("Купити хліб", output)
+
+    def test_str_output_format(self):
+        output = str(self.manager)
+        self.assertIn("1. Купити хліб - середній - Не зроблено", output)
+
+    def test_add_task_content(self):
+        self.manager.add_task("Новий", "Опис", "високий")
+        task = self.manager.tasks[-1]
+        self.assertEqual(task.description, "Опис")
+
+    def test_priority_check(self):
+        self.assertEqual(self.manager.tasks[1].priority, "високий")
+
+    def test_task_list_type(self):
+        self.assertIsInstance(self.manager.tasks, list)
+
+    def test_task_instance(self):
+        self.assertIsInstance(self.manager.tasks[0], Task)

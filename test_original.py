@@ -69,5 +69,25 @@ class TestOriginalTaskManager(unittest.TestCase):
         self.assertIn("Підготуватись до іспиту", task["title"])
 
     def test_str_output_contains(self):
-        output = self.manager.tasks[0]
-        self.assertIn("Купити хліб", output["title"])
+        output = str(self.manager)
+        self.assertIn("Купити хліб", output)
+
+    def test_str_output_format(self):
+        output = str(self.manager)
+        self.assertIn("1. Купити хліб - середній - Не зроблено", output)
+
+    def test_add_task_fields(self):
+        self.manager.add_task("Читання", "Книга", "низький")
+        task = self.manager.tasks[-1]
+        self.assertEqual(task["description"], "Книга")
+        self.assertEqual(task["priority"], "низький")
+
+    def test_priority_high(self):
+        task = self.manager.tasks[1]
+        self.assertEqual(task["priority"], "високий")
+
+    def test_task_list_type(self):
+        self.assertIsInstance(self.manager.tasks, list)
+
+    def test_task_done_type(self):
+        self.assertIsInstance(self.manager.tasks[0]["done"], bool)
