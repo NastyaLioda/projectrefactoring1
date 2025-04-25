@@ -15,6 +15,21 @@ class TaskManager:
         if 0 <= index < len(self.tasks):
             self.tasks[index]["done"] = True
 
+    def get_task(self, index):
+        if 0 <= index < len(self.tasks):
+            task = self.tasks[index]
+            status = "Зроблено" if task["done"] else "Не зроблено"
+            return f"{task['title']} - {task['priority']} - {status}\n{task['description']}"
+        return "Невірний індекс"
+
+    def list_pending_tasks(self):
+        return "\n".join(f"{i+1}. {t['title']} - {t['priority']}"
+                         for i, t in enumerate(self.tasks) if not t["done"])
+
+    def list_completed_tasks(self):
+        return "\n".join(f"{i+1}. {t['title']} - {t['priority']}"
+                         for i, t in enumerate(self.tasks) if t["done"])
+
     def __str__(self):
-        return "\n".join([f"{i+1}. {task['title']} - {task['priority']} - {'Зроблено' if task['done'] else 'Не зроблено'}"
-                          for i, task in enumerate(self.tasks)])
+        return "\n".join([f"{i+1}. {t['title']} - {t['priority']} - {'Зроблено' if t['done'] else 'Не зроблено'}"
+                          for i, t in enumerate(self.tasks)])
